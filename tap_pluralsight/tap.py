@@ -24,7 +24,7 @@ class TapPluralsight(Tap):
     config_jsonschema = th.PropertiesList(
 
         th.Property("api_token", th.StringType, required=True, description="api token for Basic auth"),
-        th.Property("start_date", th.StringType, required=False, description="Start date of initial tream"),
+
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:

@@ -41,41 +41,35 @@ class CourseCatalog(TapPluralsightStream):
     rest_method = "POST"
     name = "coursecatalog" # Stream name 
     path = "/graphql" # API endpoint after base_url 
-    records_jsonpath = "$.data.courseCatalog.nodes[*]" # https://jsonpath.com Use requests response json to identify the json path 
-    primary_keys = ["id"]
+    records_jsonpath = "$.data.contentCatalog.nodes[*]" # https://jsonpath.com Use requests response json to identify the json path 
+    next_page_token_jsonpath = "$.data.contentCatalog.pageInfo.endCursor"
+    primary_keys = ["contentId"]
     replication_key = None
     #schema_filepath = SCHEMAS_DIR / "coursecatalog.json"  # Optional: use schema_filepath with .json inside schemas/ 
 
     # Optional: If using schema_filepath, remove the propertyList schema method below
     schema = th.PropertiesList(
-        th.Property("id", th.StringType),
-        th.Property("idNum", th.NumberType),
+        th.Property("contentId", th.StringType),
+        th.Property("contentType", th.StringType),
         th.Property("title", th.StringType),
-        th.Property("url", th.StringType),
-        th.Property("authors", th.StringType),
-        th.Property("__typename", th.StringType),
-        th.Property("publishedDate", th.DateTimeType),
-        th.Property("displayDate", th.DateTimeType),
-        th.Property("releasedDate", th.DateTimeType),
-        th.Property("image", th.StringType),
+        th.Property("status", th.StringType),
+        th.Property("pathName", th.StringType),
+        th.Property("datePublished", th.DateTimeType),
+        th.Property("dateModified", th.DateTimeType),
+        th.Property("description", th.StringType),
+        th.Property("duration", th.NumberType),
+        th.Property("imageUrl", th.StringType),
         th.Property("tags", th.ObjectType(
-            th.Property("idNum", th.NumberType),
             th.Property("superDomain", th.StringType),
             th.Property("domain", th.StringType),
             th.Property("audience", th.StringType),
-            )   
+            th.Property("primaryAtomic", th.ObjectType(
+                th.Property("name", th.StringType),
+                th.Property("alternativeNames", th.StringType),
+                ),
+            ),
         ),
-        th.Property("courseStatus", th.ObjectType(
-            th.Property("name", th.StringType),
-            th.Property("reason", th.StringType),
-            th.Property("replacementCourseId", th.StringType),
-            )
-        ),
-        th.Property("averageRating", th.NumberType),
-        th.Property("level", th.StringType),
-        th.Property("language", th.StringType),
-        th.Property("slug", th.StringType),
-        th.Property("courseSeconds", th.StringType),
+    )
     ).to_dict()
 
     def prepare_request_payload(
@@ -85,7 +79,7 @@ class CourseCatalog(TapPluralsightStream):
 
         # working graphyql
         request_data = {
-            "query": ("{ courseCatalog(first:50) { nodes{ id, idNum, id title, url, authors, __typename, publishedDate, displayDate, releasedDate, image:url, tags { idNum superDomain domain audience }, courseStatus { name reason replacementCourseId }, averageRating, level, language, slug, courseSeconds,}}}"),
+            "query": (f'{{ contentCatalog(first: 100 after: "{next_page_token}") {{ totalCount pageInfo {{ endCursor hasNextPage }} nodes {{ contentId contentType title status pathName datePublished dateModified description duration imageUrl tags {{ superDomain domain audience primaryAtomic {{ name alternativeNames }} }} }} }} }}'),
             "variables": {},
         }
         
