@@ -85,8 +85,10 @@ class CourseCatalog(TapPluralsightStream):
 
         # working graphyql
         request_data = {
-            "query": ("{ courseCatalog(first:50) { nodes{ title, url, authors, __typename, publishedDate, image:url, displayDate, releasedDate, tags { idNum superDomain domain audience }, courseStatus { name reason replacementCourseId }, averageRating, level, language, slug, courseSeconds}}}"),
+            "query": ("{ courseCatalog(first:50) { nodes{ id, idNum, id title, url, authors, __typename, publishedDate, displayDate, releasedDate, image:url, tags { idNum superDomain domain audience }, courseStatus { name reason replacementCourseId }, averageRating, level, language, slug, courseSeconds,}}}"),
             "variables": {},
         }
         
         return  request_data
+
+
