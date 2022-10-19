@@ -37,15 +37,15 @@ class TapPluralsightStream(RESTStream):
 
         return SimpleAuthenticator(stream=self, auth_headers=http_headers)
 
-class CourseCatalog(TapPluralsightStream):
+class Pluralsight_ContentCatalog(TapPluralsightStream):
     rest_method = "POST"
-    name = "coursecatalog" # Stream name 
+    name = "pluralsight_contentcatalog" # Stream name 
     path = "/graphql" # API endpoint after base_url 
     records_jsonpath = "$.data.contentCatalog.nodes[*]" # https://jsonpath.com Use requests response json to identify the json path 
     next_page_token_jsonpath = "$.data.contentCatalog.pageInfo.endCursor"
     primary_keys = ["contentId"]
     replication_key = None
-    #schema_filepath = SCHEMAS_DIR / "coursecatalog.json"  # Optional: use schema_filepath with .json inside schemas/ 
+    #schema_filepath = SCHEMAS_DIR / "pluralsight_contentcatalog.json"  # Optional: use schema_filepath with .json inside schemas/ 
 
     # Optional: If using schema_filepath, remove the propertyList schema method below
     schema = th.PropertiesList(

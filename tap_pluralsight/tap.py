@@ -8,13 +8,13 @@ from singer_sdk import Tap, Stream
 from singer_sdk import typing as th
 
 from tap_pluralsight.streams import (
-    CourseCatalog,
+    Pluralsight_ContentCatalog,
 )
 
 PLUGIN_NAME = "tap-pluralsight"
 
 STREAM_TYPES = [ 
-    CourseCatalog,
+    Pluralsight_ContentCatalog,
 ]
 
 class TapPluralsight(Tap):
