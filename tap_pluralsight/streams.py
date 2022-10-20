@@ -45,32 +45,38 @@ class Pluralsight_ContentCatalog(TapPluralsightStream):
     next_page_token_jsonpath = "$.data.contentCatalog.pageInfo.endCursor"
     primary_keys = ["contentId"]
     replication_key = None
+
+
+
+
+
+    
     #schema_filepath = SCHEMAS_DIR / "pluralsight_contentcatalog.json"  # Optional: use schema_filepath with .json inside schemas/ 
 
-    # Optional: If using schema_filepath, remove the propertyList schema method below
-    schema = th.PropertiesList(
-        th.Property("contentId", th.StringType),
-        th.Property("contentType", th.StringType),
-        th.Property("title", th.StringType),
-        th.Property("status", th.StringType),
-        th.Property("pathName", th.StringType),
-        th.Property("datePublished", th.DateTimeType),
-        th.Property("dateModified", th.DateTimeType),
-        th.Property("description", th.StringType),
-        th.Property("duration", th.NumberType),
-        th.Property("imageUrl", th.StringType),
-        th.Property("tags", th.ObjectType(
-            th.Property("superDomain", th.StringType),
-            th.Property("domain", th.StringType),
-            th.Property("audience", th.StringType),
-            th.Property("primaryAtomic", th.ObjectType(
-                th.Property("name", th.StringType),
-                th.Property("alternativeNames", th.StringType),
-                ),
-            ),
-        ),
-    )
-    ).to_dict()
+    # # Optional: If using schema_filepath, remove the propertyList schema method below
+    # schema = th.PropertiesList(
+    #     th.Property("contentId", th.StringType),
+    #     th.Property("contentType", th.StringType),
+    #     th.Property("title", th.StringType),
+    #     th.Property("status", th.StringType),
+    #     th.Property("pathName", th.StringType),
+    #     th.Property("datePublished", th.DateTimeType),
+    #     th.Property("dateModified", th.DateTimeType),
+    #     th.Property("description", th.StringType),
+    #     th.Property("duration", th.NumberType),
+    #     th.Property("imageUrl", th.StringType),
+    #     th.Property("tags", th.ObjectType(
+    #         th.Property("superDomain", th.StringType),
+    #         th.Property("domain", th.StringType),
+    #         th.Property("audience", th.StringType),
+    #         th.Property("primaryAtomic", th.ObjectType(
+    #             th.Property("name", th.StringType),
+    #             th.Property("alternativeNames", th.StringType),
+    #             ),
+    #         ),
+    #     ),
+    # )
+    # ).to_dict()
 
     def prepare_request_payload(
         self, context: Optional[dict], next_page_token: Optional[Any]
