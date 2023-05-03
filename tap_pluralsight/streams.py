@@ -33,7 +33,7 @@ class TapPluralsightStream(RESTStream):
     def authenticator(self):
         http_headers = {}
 
-        http_headers["Authorization"] = "Bearer " + self.config.get("api_token")
+        http_headers["Authorization"] = "Bearer " + self.config.get("api_key")
 
         return SimpleAuthenticator(stream=self, auth_headers=http_headers)
 
