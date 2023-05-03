@@ -23,7 +23,7 @@ class TapPluralsight(Tap):
     name = "tap-pluralsight"
     config_jsonschema = th.PropertiesList(
 
-        th.Property("api_token", th.StringType, required=True, description="api token for Basic auth"),
+        th.Property("api_key", th.StringType, required=True, description="api token for Basic auth"),
 
     ).to_dict()
 
