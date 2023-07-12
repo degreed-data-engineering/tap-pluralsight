@@ -62,7 +62,7 @@ class Pluralsight_ContentCatalog(TapPluralsightStream):
         th.Property("tags", th.ObjectType(
             th.Property("superDomain", th.StringType),
             th.Property("domain", th.StringType),
-            th.Property("audience", th.StringType),
+            th.Property("audiences", th.StringType),
             th.Property("primaryAtomic", th.ObjectType(
                 th.Property("name", th.StringType),
                 th.Property("alternativeNames", th.StringType),
@@ -79,7 +79,7 @@ class Pluralsight_ContentCatalog(TapPluralsightStream):
 
         # working graphyql
         request_data = {
-            "query": (f'{{ contentCatalog(first: 100 after: "{next_page_token}") {{ totalCount pageInfo {{ endCursor hasNextPage }} nodes {{ contentId contentType title status pathName datePublished dateModified description duration imageUrl tags {{ superDomain domain audience primaryAtomic {{ name alternativeNames }} }} }} }} }}'),
+            "query": (f'{{ contentCatalog(first: 100 after: "{next_page_token}") {{ totalCount pageInfo {{ endCursor hasNextPage }} nodes {{ contentId contentType title status pathName datePublished dateModified description duration imageUrl tags {{ superDomain domain audiences primaryAtomic {{ name alternativeNames }} }} }} }} }}'),
             "variables": {},
         }
         
