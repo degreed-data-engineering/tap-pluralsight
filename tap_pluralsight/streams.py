@@ -13,10 +13,12 @@ import requests
 
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
+
 class TapPluralsightStream(RESTStream):
     """Pluralsight stream class."""
-    
+
     _LOG_REQUEST_METRIC_URLS: bool = True
+
     @property
     def url_base(self) -> str:
         """Base URL of source"""
@@ -37,15 +39,16 @@ class TapPluralsightStream(RESTStream):
 
         return SimpleAuthenticator(stream=self, auth_headers=http_headers)
 
+
 class Pluralsight_ContentCatalog(TapPluralsightStream):
     rest_method = "POST"
-    name = "pluralsight_contentcatalog" # Stream name 
-    path = "/graphql" # API endpoint after base_url 
-    records_jsonpath = "$.data.contentCatalog.nodes[*]" # https://jsonpath.com Use requests response json to identify the json path 
+    name = "pluralsight_contentcatalog"  # Stream name
+    path = "/graphql"  # API endpoint after base_url
+    records_jsonpath = "$.data.contentCatalog.nodes[*]"  # https://jsonpath.com Use requests response json to identify the json path
     next_page_token_jsonpath = "$.data.contentCatalog.pageInfo.endCursor"
     primary_keys = ["contentId"]
     replication_key = None
-    #schema_filepath = SCHEMAS_DIR / "pluralsight_contentcatalog.json"  # Optional: use schema_filepath with .json inside schemas/ 
+    # schema_filepath = SCHEMAS_DIR / "pluralsight_contentcatalog.json"  # Optional: use schema_filepath with .json inside schemas/
 
     # Optional: If using schema_filepath, remove the propertyList schema method below
     schema = th.PropertiesList(
@@ -59,17 +62,12 @@ class Pluralsight_ContentCatalog(TapPluralsightStream):
         th.Property("description", th.StringType),
         th.Property("duration", th.NumberType),
         th.Property("imageUrl", th.StringType),
-        th.Property("tags", th.ObjectType(
-            th.Property("superDomain", th.StringType),
-            th.Property("domain", th.StringType),
-            th.Property("audiences", th.StringType),
-            th.Property("primaryAtomic", th.ObjectType(
-                th.Property("name", th.StringType),
-                th.Property("alternativeNames", th.StringType),
-                ),
+        th.Property(
+            "tags",
+            th.ObjectType(
+                th.Property("allTags", th.ArrayType(th.StringType)),
             ),
         ),
-    )
     ).to_dict()
 
     def prepare_request_payload(
@@ -77,12 +75,12 @@ class Pluralsight_ContentCatalog(TapPluralsightStream):
     ) -> Optional[dict]:
         """Define request parameters to return"""
 
-        # working graphyql
         request_data = {
-            "query": (f'{{ contentCatalog(first: 100 after: "{next_page_token}") {{ totalCount pageInfo {{ endCursor hasNextPage }} nodes {{ contentId contentType title status pathName datePublished dateModified description duration imageUrl tags {{ superDomain domain audiences primaryAtomic {{ name alternativeNames }} }} }} }} }}'),
+            "query": (
+                f'{{ contentCatalog(first: 100, after: "{next_page_token}") {{ totalCount pageInfo {{ endCursor hasNextPage }} nodes {{ contentId contentType title status pathName datePublished dateModified description duration imageUrl tags {{ allTags }} }} }} }}'
+            ),
             "variables": {},
         }
-        
-        return  request_data
 
 
+        return request_data
