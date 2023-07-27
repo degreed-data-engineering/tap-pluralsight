@@ -4,19 +4,19 @@ This tap template was created by Degreed as a template to be used for extracting
 
 ## tap-template
 
-These are the steps required for using this repo as a 'template' for a Meltano extractor. Note: we will use tap-datadog as the example throughout the process.
+These are the steps required for using this repo as a 'template' for a Meltano extractor. Note: we will use tap-pluralsight as the example throughout the process.
 
 1.  Being aware of case sensitivity, replace the following throughout the repo:
 
-* `tap-template` >`tap-datadog` 
-* `tap_template` > `tap_datadog`
-* `TapTemplateStream` > `TapDatadogStream` (inside `streams.py`)
+* `tap-template` >`tap-pluralsight` 
+* `tap_template` > `tap_pluralsight`
+* `TapTemplateStream` > `TapPluralsightStream` (inside `streams.py`)
 
 2. Update the following folders/files to:
-* `tap_template` > `tap_datadog`
-* `tap-template.sh` > `tap-datadog.sh`
+* `tap_template` > `tap_pluralsight`
+* `tap-template.sh` > `tap-pluralsight.sh`
 
-3. Inside `streams.py` update TapTemplateStream with the authentication used for the tap-datadog api calls.  Note: all streams in streams.py work as a heirarchy further down. i.e. you can replace the http headers in another stream
+3. Inside `streams.py` update TapTemplateStream with the authentication used for the tap-pluralsight api calls.  Note: all streams in streams.py work as a heirarchy further down. i.e. you can replace the http headers in another stream
 
 4. Using `Events(TapTemplateStream)` as an example, build your first stream to be synced. There are comments to help identify what values to use 
 
@@ -85,7 +85,7 @@ For the schema, you can create the .json file and place it in the schemas/ folde
 }
 ```
 
-- **Option 2:** Defining schema using hte PropertiesList in the stream `class`: 
+- **Option 2:** Defining schema using the PropertiesList in the stream `class`: 
 ```python
 schema = th.PropertiesList(
         th.Property("id", th.NumberType),
@@ -134,9 +134,7 @@ To test locally, create a `config.json` with required config values in your tap_
 
 ```json
 {
-  "api_key": "$DD_API_KEY",
-  "app_key": "$DD_APP_KEY",
-  "start_date": "2022-10-05T00:00:00Z"
+  "api_key": "$API_KEY",
 }
 ```
 
@@ -145,31 +143,30 @@ To test locally, create a `config.json` with required config values in your tap_
 
 The provided `meltano.yml` provides the correct setup for the tap to be installed in the data-houston repo.  
 
-At this point you should move all your updated tap files into its own tap-datadog github repo. You also want to make sure you update in the `setup.py` the `url` of the repo for you tap.
+At this point you should move all your updated tap files into its own tap-pluralsight github repo. You also want to make sure you update in the `setup.py` the `url` of the repo for you tap.
 
-Update the following in meltano within the data-houston repo with the new tap-datadog credentials/configuration.
+Update the following in meltano within the data-houston repo with the new tap-pluralsight credentials/configuration.
 
 ```yml
 plugins:
   extractors:
-  - name: tap-datadog
-    namespace: tap_datadog
-    pip_url: git+https://github.com/degreed-data-engineering/tap-datadog
+  - name: tap-pluralsight
+    namespace: tap-pluralsight
+    pip_url: git+https://github.com/degreed-data-engineering/tap-pluralsight
     capabilities:
     - state
     - catalog
     - discover
     config:
-      api_key: $DD_API_KEY
-      app_key: $DD_APP_KEY
-      start_date: '2022-10-05T00:00:00Z'
+      api_key: API-KEY
+
  ```
 
 To test in data-houston, run the following:
 1. `make meltano` - spins up meltano
-2. `meltano install extractor tap-datadog` - installs the tap
-3. `meltano invoke tap-datadog --discover > catalog.json` - tests the catalog/discovery
-3. `meltano invoke tap-datadog > output.txt` - runs tap with .txt output in `meltano/degreed/`
+2. `meltano install extractor tap-pluralsight` - installs the tap
+3. `meltano invoke tap-pluralsight --discover > catalog.json` - tests the catalog/discovery
+3. `meltano invoke tap-pluralsight > output.txt` - runs tap with .txt output in `meltano/degreed/`
 
 That should be it! Feel free to contribute to the tap to help add functionality for any future sources
 ## Singer SDK Dev Guide

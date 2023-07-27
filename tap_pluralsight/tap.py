@@ -13,23 +13,27 @@ from tap_pluralsight.streams import (
 
 PLUGIN_NAME = "tap-pluralsight"
 
-STREAM_TYPES = [ 
+STREAM_TYPES = [
     Pluralsight_ContentCatalog,
 ]
+
 
 class TapPluralsight(Tap):
     """pluralsight tap class."""
 
     name = "tap-pluralsight"
     config_jsonschema = th.PropertiesList(
-
-        th.Property("api_key", th.StringType, required=True, description="api token for Basic auth"),
-
+        th.Property(
+            "api_key",
+            th.StringType,
+            required=True,
+            description="api token for Basic auth",
+        ),
     ).to_dict()
 
     def discover_streams(self) -> List[Stream]:
         """Return a list of discovered streams."""
-        streams =  [stream_class(tap=self) for stream_class in STREAM_TYPES]
+        streams = [stream_class(tap=self) for stream_class in STREAM_TYPES]
 
         return streams
 
